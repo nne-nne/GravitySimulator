@@ -1,5 +1,6 @@
 #include "SimulationObject.h"
 #include <cmath>
+#include <QDebug>
 
 SimulationObject::SimulationObject(const std::string& name, std::pair<double, double> position,
                                    std::pair<double, double> velocity, std::pair<double, double> acceleration,
@@ -18,7 +19,7 @@ void SimulationObject::resetAcceleration() {
 }
 
 void SimulationObject::collide(SimulationObject& other) {
-    std::cout << "Collision between " << name << " and " << other.name << std::endl;
+    qInfo() << "Collision between " << name << " and " << other.name << "\n";
 
     // Example: Invert the velocities for a simple bounce effect
     std::pair<double, double> temp = velocity;
