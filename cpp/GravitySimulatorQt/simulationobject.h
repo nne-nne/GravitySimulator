@@ -3,12 +3,14 @@
 
 #include <cmath>
 #include <string>
+#include <QString>
 
 class SimulationObject {
 public:
-    SimulationObject(const std::string& name = "?", std::pair<double, double> position = {-1.0, -1.0},
-                     std::pair<double, double> velocity = {0.0, 0.0}, std::pair<double, double> acceleration = {0, 0},
-                     double radius = 0.0, double mass = 0.0);
+    SimulationObject(const QString name, std::pair<double, double> position,
+                     std::pair<double, double> velocity, std::pair<double, double> acceleration,
+                     double radius, double mass);
+
 
     void fall(double frame_time);
     void resetAcceleration();
@@ -17,10 +19,15 @@ public:
     void applyGravity(SimulationObject& other, double gforce);
     bool detectCollision(const SimulationObject& other);
 
-    // Getters and setters if needed
+    std::pair<double, double> getPosition();
+    void setPosition(double x, double y);
+    QString getName();
+    double getRadius();
+    void setRadius(double r);
+    bool getIsHighlighted();
 
 private:
-    std::string name;
+    QString name;
     std::pair<double, double> position;
     std::pair<double, double> velocity;
     std::pair<double, double> acceleration;

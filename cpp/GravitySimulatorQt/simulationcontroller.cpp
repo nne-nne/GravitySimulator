@@ -1,6 +1,7 @@
-#include "SimulationController.h"
-#include "SimulationObject.h"
+#include "simulationcontroller.h"
+#include "simulationobject.h"
 #include <cmath>
+#include <QVariant>
 
 SimulationController::SimulationController(QObject* app, const QPoint& size, const QPoint& margin)
     : app(app), size(size), margin(margin), gforce(6.67408), isPaused(false), simulationSpeed(1.0),
@@ -40,15 +41,15 @@ void SimulationController::nextFrame(double frameTime)
 void SimulationController::checkDestroyObject(SimulationObject* o)
 {
     bool destroy = false;
-    if (o->position.x() < -margin.x() || o->position.y() < -margin.y() ||
-        o->position.x() > margin.x() + size.x() || o->position.y() > margin.y() + size.y())
+    if (o->getPosition().first < -margin.x() || o->getPosition().second < -margin.y() ||
+        o->getPosition().first > margin.x() + size.x() || o->getPosition().second > margin.y() + size.y())
     {
         destroy = true;
     }
 
     if (destroy)
     {
-        app->setProperty("info_label", QString("Obiekt %1 opuścił obszar symulacji.").arg(o->name));
+        app->setProperty("info_label", QString("Obiekt %1 opuścił obszar symulacji.").arg(o->getName()));
         simulationObjects.removeOne(o);
         delete o;
     }
@@ -74,8 +75,8 @@ void SimulationController::simulateGravity(double frameTime, double gforce)
             if (simulationObjects[i]->detectCollision(simulationObjects[j]))
             {
                 app->setProperty("info_label", QString("Kolizja obiektów %1 i %2.")
-                                              .arg(simulationObjects[i]->name)
-                                              .arg(simulationObjects[j]->name));
+                                              .arg(simulationObjects[i]->getName())
+                                                   .arg(simulationObjects[j]->getName()));
                 simulationObjects[i]->collide(simulationObjects[j]);
             }
         }
@@ -90,13 +91,13 @@ void SimulationController::highlightObject(SimulationObject* o)
     unhighlight();
 
     if (o)
-        o->isHighlighted = true;
+        o->getIsHighlighted() = true;
 }
 
 void SimulationController::adjustObject(SimulationObject* o)
 {
     // Implementation for adjusting object properties
-    double prevRadius = o->radius;
+    double prevRadius = o->getRadius();
 
     if (!app->property("radius_edit").toString().isEmpty())
     {
@@ -104,7 +105,7 @@ void SimulationController::adjustObject(SimulationObject* o)
         double r = app->property("radius_edit").toString().toDouble(&ok);
         if (ok && r > 0)
         {
-            o->radius = r;
+            o->setRadius(r);
         }
         else
         {
@@ -214,4 +215,20 @@ void SimulationController::unhighlight()
 {
     for (SimulationObject* o : simulationObjects)
         o->isHighlighted = false;
+}
+
+
+void SimulationController::getSimulationObject(int i)
+{
+    return simulationObjects[i];
+}
+
+bool SimulationController::getIsPaused()
+{
+    return isPaused;
+}
+
+void SimulationController::setIsPaused(bool val)
+{
+    isPaused =val;
 }

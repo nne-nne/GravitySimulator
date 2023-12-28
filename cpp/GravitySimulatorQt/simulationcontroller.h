@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QList>
 #include <QPointF>
-#include <QTime>
+#include <QElapsedTimer>
 #include "SimulationObject.h"  // Include the header file for SimulationObject
 
 class SimulationController : public QObject {
@@ -24,13 +24,16 @@ public:
     void createSimulationObject(const QPointF& clickPosition);
     void chooseObjectToEdit(SimulationObject* o);
     void unhighlight();
+    SimulationObject* getSimulationObject(int i);
+    bool getIsPaused();
+    void setIsPaused(bool val);
 
 private:
     QList<SimulationObject*> simulationObjects;
     QObject* app;
     QPoint size;
     QPoint margin;
-    QTime prevTime;
+    QElapsedTimer prevTime;
     double gforce;
     bool isPaused;
     double simulationSpeed;

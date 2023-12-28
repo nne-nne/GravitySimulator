@@ -126,12 +126,12 @@ void MainWindow::setInfoLabel(const QString &text) {
 }
 
 void MainWindow::togglePause() {
-    if (!controller.isPaused) {
+    if (!controller.getIsPaused()) {
         pauseButton->setText("Wznów");
-        controller.isPaused = true;
+            controller.setIsPaused(true);
     } else {
         pauseButton->setText("Pauza");
-        controller.isPaused = false;
+        controller.setIsPaused(false);
     }
 }
 

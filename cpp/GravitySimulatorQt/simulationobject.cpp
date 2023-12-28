@@ -2,7 +2,7 @@
 #include <cmath>
 #include <QDebug>
 
-SimulationObject::SimulationObject(const std::string& name, std::pair<double, double> position,
+SimulationObject::SimulationObject(const QString name, std::pair<double, double> position,
                                    std::pair<double, double> velocity, std::pair<double, double> acceleration,
                                    double radius, double mass)
     : name(name), position(position), velocity(velocity), acceleration(acceleration), radius(radius), mass(mass),
@@ -20,8 +20,6 @@ void SimulationObject::resetAcceleration() {
 
 void SimulationObject::collide(SimulationObject& other) {
     qInfo() << "Collision between " << name << " and " << other.name << "\n";
-
-    // Example: Invert the velocities for a simple bounce effect
     std::pair<double, double> temp = velocity;
     velocity = other.velocity;
     other.velocity = temp;
@@ -65,4 +63,33 @@ bool SimulationObject::detectCollision(const SimulationObject& other) {
     double dist = std::sqrt(std::pow(other.position.first - position.first, 2) +
                             std::pow(other.position.second - position.second, 2));
     return dist < radius + other.radius;
+}
+
+std::pair<double, double> SimulationObject::getPosition()
+{
+    return position;
+}
+
+void SimulationObject::setPosition(double x, double y)
+{
+    position.first = x;
+    position.second = y;
+}
+
+QString SimulationObject::getName()
+{
+    return name;
+}
+
+double SimulationObject::getRadius()
+{
+    return radius;
+}
+
+void SimulationObject::setRadius(double r){
+    radius = r;
+}
+
+bool SimulationObject::getIsHighlighted(){
+    return isHighlighted;
 }

@@ -16,6 +16,7 @@
 #include <QDateTime>
 #include "SimulationController.h"
 #include "SimulationArea.h"
+#include "simulationobjecttile.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -56,7 +57,7 @@ private:
     QPushButton *addEditButton2;
     QWidget *objectPanel;
     QVBoxLayout *simulationObjectLayout;
-    QList<SimulationObjectTile *> objectTiles;
+    QList<SimulationObjectTile*> objectTiles;
     QWidget *propertiesPanel;
     QVBoxLayout *propertiesLayout;
     QLabel *nameLabel;

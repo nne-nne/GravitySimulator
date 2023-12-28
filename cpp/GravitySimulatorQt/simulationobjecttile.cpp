@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include "simulationobjecttile.h"
 
 class SimulationObjectTile : public QWidget {
     Q_OBJECT
