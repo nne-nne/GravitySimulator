@@ -5,6 +5,8 @@
 #include <QPointF>
 #include "simulationcontroller.h"
 
+class SimulationController;
+
 class SimulationArea : public QWidget {
     Q_OBJECT
 

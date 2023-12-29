@@ -23,6 +23,9 @@ public:
     void setPosition(double x, double y);
     QString getName();
     double getRadius();
+    double getMass();
+    std::pair<double, double> getVelocity();
+    std::pair<double, double> getAcceleration();
     void setRadius(double r);
     bool getIsHighlighted();
     void setIsHighlighted(bool val);

@@ -86,6 +86,19 @@ double SimulationObject::getRadius()
     return radius;
 }
 
+double SimulationObject::getMass()
+{
+    return mass;
+}
+
+std::pair<double, double> SimulationObject::getAcceleration(){
+    return acceleration;
+}
+
+std::pair<double, double> SimulationObject::getVelocity(){
+    return velocity;
+}
+
 void SimulationObject::setRadius(double r)
 {
     radius = r;

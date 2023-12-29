@@ -18,6 +18,10 @@
 #include "SimulationArea.h"
 #include "simulationobjecttile.h"
 
+class SimulationArea;
+class SimulationController;
+class SimulationObjectTile;
+
 class MainAppWindow : public QWidget {
     Q_OBJECT
 
@@ -41,7 +45,7 @@ private slots:
     void changeSimulationSpeed();
 
 private:
-    SimulationController controller;
+    SimulationController *controller;
     SimulationArea *simulationArea;
     QVBoxLayout *rootLayout;
     QHBoxLayout *mainLayout;

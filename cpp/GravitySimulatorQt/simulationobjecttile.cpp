@@ -25,17 +25,17 @@ SimulationObjectTile::SimulationObjectTile(SimulationObject* simulation_object, 
     bottom_row_layout->setContentsMargins(0, 0, 0, 0);
     bottom_row_layout->setAlignment(Qt::AlignLeft);
 
-    button_name = new QLabel(o->name, this);
+    button_name = new QLabel(o->getName(), this);
     mass_label = new QLabel("masa:", this);
-    mass_val = new QLabel(QString::number(o->mass), this);
+    mass_val = new QLabel(QString::number(o->getMass()), this);
     position_label = new QLabel("pozycja:", this);
-    position_val = new QLabel(QString("%1; %2").arg(o->position[0]).arg(o->position[1]), this);
+    position_val = new QLabel(QString("%1; %2").arg(o->getPosition().first).arg(o->getPosition().second), this);
     position_val->setFixedWidth(300);
     speed_label = new QLabel("prędkość:", this);
-    speed_val = new QLabel(QString("%1; %2").arg(o->velocity[0]).arg(o->velocity[1]), this);
+    speed_val = new QLabel(QString("%1; %2").arg(o->getVelocity().first).arg(o->getVelocity().second), this);
     speed_val->setFixedWidth(80);
     radius_label = new QLabel("promień:", this);
-    radius_val = new QLabel(QString::number(o->radius), this);
+    radius_val = new QLabel(QString::number(o->getRadius()), this);
     acc_label = new QLabel("przyspieszenie:", this);
     acc_val = new QLabel(QString("%1; %2").arg(o->acceleration[0]).arg(o->acceleration[1]), this);
     acc_val->setFixedWidth(80);
@@ -57,31 +57,31 @@ SimulationObjectTile::SimulationObjectTile(SimulationObject* simulation_object, 
 }
 
 void SimulationObjectTile::update() {
-    button_name->setText(o->name);
-    mass_val->setText(QString::number(o->mass));
-    position_val->setText(QString("%1; %2").arg(o->position[0]).arg(o->position[1]));
-    speed_val->setText(QString("%1; %2").arg(o->velocity[0]).arg(o->velocity[1]));
-    radius_val->setText(QString::number(o->radius));
-    acc_val->setText(QString("%1; %2").arg(o->acceleration[0]).arg(o->acceleration[1]));
+    button_name->setText(o->getName());
+    mass_val->setText(QString::number(o->getMass()));
+    position_val->setText(QString("%1; %2").arg(o->getPosition().first).arg(o->getPosition().second));
+    speed_val->setText(QString("%1; %2").arg(o->getVelocity().first).arg(o->getVelocity().second));
+    radius_val->setText(QString::number(o->getRadius()));
+    acc_val->setText(QString("%1; %2").arg(o->getAcceleration().first).arg(o->getAcceleration().second));
 
-    if (!controller->simulation_objects.contains(o)) {
+    if (!controller->getSimulationObjects()->contains(o)) {
         remove();
     }
 }
 
 void SimulationObjectTile::mousePressEvent(QMouseEvent* event) override {
     controller->chooseObjectToEdit(o);
-    if (controller->isAdding) {
-        controller->app->toggleAdding();
+    if (controller->getIsAdding()) {
+        controller->getMainAppWindow()->toggleAdding();
     }
 }
 
 void SimulationObjectTile::remove() {
-    controller->mainAppWindow->objectTiles.removeOne(this);
+    controller->getMainAppWindow()->objectTiles.removeOne(this);
     if (controller->getSimulationObjects()->contains(*o)) {
         controller->getSimulationObjects()->removeOne(*o);
     }
     deleteLater();
-    controller->app->simulationObjectLayout->removeWidget(wrapper);
+    controller->getMainAppWindow()->simulationObjectLayout->removeWidget(wrapper);
 }
 

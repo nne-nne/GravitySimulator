@@ -9,10 +9,10 @@ SimulationArea* MainAppWindow::getSimulationArea()
 
 SimulationController* MainAppWindow::getController()
 {
-    return &controller;
+    return controller;
 }
 
-MainAppWindow::MainAppWindow() : simulationArea(new SimulationArea(this, &controller)) {
+MainAppWindow::MainAppWindow() : simulationArea(new SimulationArea(this, controller)) {
     setWindowTitle("Symulator Grawitacji");
     setFixedSize(1150, 550);
 

@@ -10,6 +10,8 @@
 #include "simulationobject.h"
 #include "simulationcontroller.h"
 
+class SimulationController;
+
 class SimulationObjectTile : public QWidget {
     Q_OBJECT
 

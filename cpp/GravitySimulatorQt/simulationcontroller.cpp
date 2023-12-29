@@ -179,7 +179,7 @@ void SimulationController::createSimulationObject(const QPointF& clickPosition)
     if (canPlace)
     {
         simulationObjects.push_back(o);
-        mainAppWindow->addObjectTile(&o);
+        mainAppWindow->addObjectTile(o);
         mainAppWindow->setProperty("info_label", QString("dodano obiekt %1").arg(o->getName()));
 
         // Clear the input fields in the UI

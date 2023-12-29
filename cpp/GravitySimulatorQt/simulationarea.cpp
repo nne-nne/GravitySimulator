@@ -10,7 +10,7 @@ SimulationArea::SimulationArea(QWidget *parent, SimulationController *simulation
     : QWidget(parent), simulationController(simulationController) {}
 
 
-void SimulationArea::paintEvent(QPaintEvent *event) override {
+void SimulationArea::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::transparent);
@@ -55,7 +55,7 @@ void SimulationArea::mousePressEvent(QMouseEvent *event) override {
                 }
 
                 if (simulationController->getEditedObject()->detectCollision(*other)) {
-                    simulationController->getApp()->setInfoLabel("akcja spowodowałaby kolizję!");
+                    simulationController->getMainAppWindow()->setInfoLabel("akcja spowodowałaby kolizję!");
                     simulationController->getEditedObject()->setPosition(prevPos.first, prevPos.second);
                     break;
                 }
