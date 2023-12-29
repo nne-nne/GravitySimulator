@@ -14,7 +14,7 @@ public:
     SimulationArea(QWidget *parent, SimulationController *simulationController);
 
 public slots:
-    void update();
+    void updateSimulation();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

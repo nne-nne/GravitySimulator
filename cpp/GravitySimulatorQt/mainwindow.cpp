@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "simulationobjecttile.h"
+#include "SimulationArea.h"
 #include <QDateTime>
 
 SimulationArea* MainAppWindow::getSimulationArea()

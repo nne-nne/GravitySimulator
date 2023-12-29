@@ -64,7 +64,7 @@ void SimulationObjectTile::update() {
     radius_val->setText(QString::number(o->getRadius()));
     acc_val->setText(QString("%1; %2").arg(o->getAcceleration().first).arg(o->getAcceleration().second));
 
-    if (!controller->getSimulationObjects().contains(*o)) {
+    if (!controller->getSimulationObjects().contains(o)) {
         remove();
     }
 }
@@ -78,8 +78,8 @@ void SimulationObjectTile::mousePressEvent(QMouseEvent* event) {
 
 void SimulationObjectTile::remove() {
     controller->getMainAppWindow()->getObjectTiles().removeOne(this);
-    if (controller->getSimulationObjects().contains(*o)) {
-        controller->getSimulationObjects().removeOne(*o);
+    if (controller->getSimulationObjects().contains(o)) {
+        controller->getSimulationObjects().removeOne(o);
     }
     deleteLater();
     controller->getMainAppWindow()->getSimulationObjectLayout()->removeWidget(wrapper);

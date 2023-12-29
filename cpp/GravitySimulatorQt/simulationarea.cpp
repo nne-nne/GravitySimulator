@@ -10,6 +10,11 @@ SimulationArea::SimulationArea(QWidget *parent, SimulationController *simulation
     : QWidget(parent), simulationController(simulationController) {}
 
 
+void SimulationArea::updateSimulation()
+{
+    repaint();
+}
+
 void SimulationArea::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
