@@ -17,7 +17,7 @@ public slots:
     void brr();
 
 public:
-    SimulationController(QObject* mainAppWindow, const QPoint& size, const QPoint& margin, double gforce, bool isPaused, double simulationSpeed, double timeRes, bool isAdding, SimulationObject* editedObject);
+    SimulationController(MainAppWindow* mainAppWindow, const QPoint& size, const QPoint& margin, double gforce, bool isPaused, double simulationSpeed, double timeRes, bool isAdding, SimulationObject* editedObject);
     void resetSimulation();
     void nextFrame(double frameTime);
     void checkDestroyObject(SimulationObject* o);

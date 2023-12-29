@@ -29,18 +29,20 @@ public:
     MainAppWindow();
     SimulationArea* getSimulationArea();
     SimulationController* getController();
+    QVBoxLayout* getSimulationObjectLayout();
+    void setInfoLabel(const QString &text);
+    QList<SimulationObjectTile*> getObjectTiles();
 
 public slots:
     void updateTiles();
+    void addObjectTile(SimulationObject *o);
+    void toggleAdding();
 
 private slots:
     void adjustEdited();
-    void addObjectTile(SimulationObject *o);
     void showAboutView();
     void returnToMain();
-    void setInfoLabel(const QString &text);
     void togglePause();
-    void toggleAdding();
     void showNewSimulationDialogue();
     void changeSimulationSpeed();
 

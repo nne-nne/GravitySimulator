@@ -3,11 +3,11 @@
 #include <cmath>
 #include <QVariant>
 
-SimulationController::SimulationController(MainAppWindow* mainAppWindow, const QPoint& size, const QPoint& margin)
-    : mainAppWindow(mainAppWindow), size(size), margin(margin), gforce(6.67408), isPaused(false), simulationSpeed(1.0),
-      timeRes(0.0), isAdding(true), editedObject(nullptr)
+SimulationController::SimulationController(MainAppWindow* mainAppWindow, const QPoint& size, const QPoint& margin, double gforce, bool isPaused, double simulationSpeed, double timeRes, bool isAdding, SimulationObject* editedObject)
+    : mainAppWindow(mainAppWindow), size(size), margin(margin), gforce(gforce), isPaused(isPaused), simulationSpeed(simulationSpeed),
+      timeRes(timeRes), isAdding(isAdding), editedObject(editedObject)
 {
-    prevTime.start();
+   prevTime.start();
 }
 
 void SimulationController::resetSimulation()
@@ -113,7 +113,6 @@ void SimulationController::adjustObject(SimulationObject* o)
         }
     }
 
-    // Clear the input fields in the UI
     mainAppWindow->setProperty("mass_edit", "");
     mainAppWindow->setProperty("name_edit", "");
     mainAppWindow->setProperty("radius_edit", "");
@@ -127,7 +126,6 @@ void SimulationController::adjustObject(SimulationObject* o)
 
 void SimulationController::createSimulationObject(const QPointF& clickPosition)
 {
-    // Implementation for creating a new simulation object
     QString name = mainAppWindow->property("name_edit").toString();
     if (name.isEmpty())
     {
@@ -163,7 +161,6 @@ void SimulationController::createSimulationObject(const QPointF& clickPosition)
     std::pair<double, double> acceleration(0, 0);
     SimulationObject* o = new SimulationObject(name, position, velocity, acceleration, radius, mass);
 
-    // Check for collision and other conditions
     bool canPlace = true;
     for (int i = 0; i < simulationObjects.size(); i++)
     {
@@ -182,7 +179,6 @@ void SimulationController::createSimulationObject(const QPointF& clickPosition)
         mainAppWindow->addObjectTile(o);
         mainAppWindow->setProperty("info_label", QString("dodano obiekt %1").arg(o->getName()));
 
-        // Clear the input fields in the UI
         mainAppWindow->setProperty("name_edit", "");
         mainAppWindow->setProperty("mass_edit", "");
         mainAppWindow->setProperty("radius_edit", "");
@@ -192,7 +188,6 @@ void SimulationController::createSimulationObject(const QPointF& clickPosition)
         mainAppWindow->setProperty("position_edit_y", "");
     }
 }
-
 
 void SimulationController::chooseObjectToEdit(SimulationObject* o)
 {

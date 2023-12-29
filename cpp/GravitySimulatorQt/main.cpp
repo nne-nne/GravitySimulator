@@ -13,6 +13,5 @@ int main(int argc, char *argv[])
     QObject::connect(&timer, &QTimer::timeout, mainAppWindow.getController(), &SimulationController::brr);
     timer.start(1);
     mainAppWindow.show();
-    mainAppWindow.show();
     return a.exec();
 }

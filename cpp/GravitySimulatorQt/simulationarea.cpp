@@ -35,7 +35,7 @@ void SimulationArea::paintEvent(QPaintEvent *event) {
     }
 }
 
-void SimulationArea::mousePressEvent(QMouseEvent *event) override {
+void SimulationArea::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         int x = event->x();
         int y = event->y();

@@ -12,15 +12,17 @@ SimulationController* MainAppWindow::getController()
     return controller;
 }
 
-MainAppWindow::MainAppWindow() : simulationArea(new SimulationArea(this, controller)) {
+QVBoxLayout* MainAppWindow::getSimulationObjectLayout()
+{
+    return simulationObjectLayout;
+}
+
+MainAppWindow::MainAppWindow() : simulationArea() {
     setWindowTitle("Symulator Grawitacji");
     setFixedSize(1150, 550);
-
-    // Create simulation controller
-    controller.setParent(this);
-    controller.initialize(QPointF(500, 500), QPointF(100, 100));
-
-    // Create root widget
+    controller = new SimulationController(this, QPointF(500, 500), QPointF(100, 100), 6.67408, false, 1.0, 0.0, true, nullptr);
+    controller->setParent(this);
+    simulationArea = new SimulationArea(this, controller);
     rootWidget = new QWidget(this);
     setCentralWidget(rootWidget);
     rootLayout = new QVBoxLayout(rootWidget);
@@ -101,7 +103,7 @@ void MainAppWindow::adjustEdited() {
 }
 
 void MainAppWindow::addObjectTile(SimulationObject *o) {
-    SimulationObjectTile *tile = new SimulationObjectTile(o, &controller);
+    SimulationObjectTile *tile = new SimulationObjectTile(o, controller);
     QWidget *wrapper = new QWidget(this);
     QHBoxLayout *wrapperLayout = new QHBoxLayout(wrapper);
     wrapperLayout->setAlignment(Qt::AlignLeft);
@@ -183,6 +185,11 @@ void MainAppWindow::showNewSimulationDialogue() {
         pauseButton->setText("Pauza");
         controller.setIsPaused(false);
     }
+}
+
+QList<SimulationObjectTile*> MainAppWindow::getObjectTiles()
+{
+    return objectTiles;
 }
 
 void MainAppWindow::changeSimulationSpeed() {

@@ -37,7 +37,7 @@ SimulationObjectTile::SimulationObjectTile(SimulationObject* simulation_object, 
     radius_label = new QLabel("promień:", this);
     radius_val = new QLabel(QString::number(o->getRadius()), this);
     acc_label = new QLabel("przyspieszenie:", this);
-    acc_val = new QLabel(QString("%1; %2").arg(o->acceleration[0]).arg(o->acceleration[1]), this);
+    acc_val = new QLabel(QString("%1; %2").arg(o->getAcceleration().first).arg(o->getAcceleration().second), this);
     acc_val->setFixedWidth(80);
 
     upper_row_layout->addWidget(button_name);
@@ -64,12 +64,12 @@ void SimulationObjectTile::update() {
     radius_val->setText(QString::number(o->getRadius()));
     acc_val->setText(QString("%1; %2").arg(o->getAcceleration().first).arg(o->getAcceleration().second));
 
-    if (!controller->getSimulationObjects()->contains(o)) {
+    if (!controller->getSimulationObjects().contains(*o)) {
         remove();
     }
 }
 
-void SimulationObjectTile::mousePressEvent(QMouseEvent* event) override {
+void SimulationObjectTile::mousePressEvent(QMouseEvent* event) {
     controller->chooseObjectToEdit(o);
     if (controller->getIsAdding()) {
         controller->getMainAppWindow()->toggleAdding();
@@ -77,11 +77,11 @@ void SimulationObjectTile::mousePressEvent(QMouseEvent* event) override {
 }
 
 void SimulationObjectTile::remove() {
-    controller->getMainAppWindow()->objectTiles.removeOne(this);
-    if (controller->getSimulationObjects()->contains(*o)) {
-        controller->getSimulationObjects()->removeOne(*o);
+    controller->getMainAppWindow()->getObjectTiles().removeOne(this);
+    if (controller->getSimulationObjects().contains(*o)) {
+        controller->getSimulationObjects().removeOne(*o);
     }
     deleteLater();
-    controller->getMainAppWindow()->simulationObjectLayout->removeWidget(wrapper);
+    controller->getMainAppWindow()->getSimulationObjectLayout()->removeWidget(wrapper);
 }
 

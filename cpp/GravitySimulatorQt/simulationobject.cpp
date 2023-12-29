@@ -32,22 +32,18 @@ void SimulationObject::simulateStep(double frame_time) {
 }
 
 void SimulationObject::applyGravity(SimulationObject& other, double gforce) {
-    // Calculate the distance and direction between the two objects
     double distX = other.position.first - position.first;
     double distY = other.position.second - position.second;
     double dist = std::sqrt(distX * distX + distY * distY);
 
-    // Avoid division by zero
     if (dist == 0.0) {
         return;
     }
 
-    // Calculate the force and direction of the gravitational force
     double force = (gforce * mass * other.mass) / (dist * dist);
     double dirX = distX / dist;
     double dirY = distY / dist;
 
-    // Apply the gravitational force to the acceleration of both objects
     acceleration.first += dirX * force / mass;
     acceleration.second += dirY * force / mass;
 
