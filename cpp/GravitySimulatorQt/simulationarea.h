@@ -3,13 +3,16 @@
 
 #include <QWidget>
 #include <QPointF>
-#include "SimulationController.h"
+#include "simulationcontroller.h"
 
 class SimulationArea : public QWidget {
     Q_OBJECT
 
 public:
     SimulationArea(QWidget *parent, SimulationController *simulationController);
+
+public slots:
+    void update();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

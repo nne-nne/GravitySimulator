@@ -4,7 +4,7 @@
 #include <QBrush>
 #include <QColor>
 #include <QFont>
-#include "SimulationController.h"
+#include "simulationcontroller.h"
 
 class SimulationArea : public QWidget {
     Q_OBJECT
@@ -26,15 +26,15 @@ protected:
         painter.setFont(font);
 
         for (const auto &o : simulationController->getSimulationObjects()) {
-            if (o.isHighlighted) {
+            if (o->getIsHighlighted()) {
                 painter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
             } else {
                 painter.setBrush(QBrush(QColor(220, 220, 220), Qt::SolidPattern));
             }
 
-            painter.drawEllipse(QRectF(o.position[0] - o.radius, o.position[1] - o.radius, o.radius * 2, o.radius * 2));
+            painter.drawEllipse(QRectF(o->getPosition().first - o->getRadius(), o->getPosition().second - o->getRadius(), o->getRadius() * 2, o->getRadius() * 2));
             painter.setPen(Qt::black);
-            painter.drawText(QPointF(o.position[0] + 10, o.position[1] + 10), o.name);
+            painter.drawText(QPointF(o->getPosition().first + 10, o->getPosition().second + 10), o->getName());
             painter.setPen(Qt::transparent);
         }
     }
@@ -44,20 +44,23 @@ protected:
             int x = event->x();
             int y = event->y();
 
-            if (simulationController->isAdding()) {
+            if (simulationController->getIsAdding()) {
                 simulationController->createSimulationObject(QPointF(x, y));
             } else {
-                QPointF prevPos = simulationController->getEditedObject().position;
-                simulationController->getEditedObject().position = QPointF(x, y);
+                std::pair<double, double> prevPos = simulationController->getEditedObject()->getPosition();
+                simulationController->getEditedObject()->setPosition(x, y);
 
-                for (const auto &other : simulationController->getSimulationObjects()) {
-                    if (other.position == simulationController->getEditedObject().position) {
+                QList<SimulationObject *> simulationObjects = simulationController->getSimulationObjects();
+                for (int i = 0; i < simulationObjects.size(); i++)
+                {
+                    SimulationObject* other = simulationObjects.at(i);
+                    if (other->getPosition() == simulationController->getEditedObject()->getPosition()) {
                         continue;
                     }
 
-                    if (simulationController->getEditedObject().detectCollision(other)) {
+                    if (simulationController->getEditedObject()->detectCollision(*other)) {
                         simulationController->getApp()->setInfoLabel("akcja spowodowałaby kolizję!");
-                        simulationController->getEditedObject().position = prevPos;
+                        simulationController->getEditedObject()->setPosition(prevPos.first, prevPos.second);
                         break;
                     }
                 }

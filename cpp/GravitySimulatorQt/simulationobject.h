@@ -17,7 +17,7 @@ public:
     void collide(SimulationObject& other);
     void simulateStep(double frame_time);
     void applyGravity(SimulationObject& other, double gforce);
-    bool detectCollision(const SimulationObject& other);
+    bool detectCollision(SimulationObject& other);
 
     std::pair<double, double> getPosition();
     void setPosition(double x, double y);
@@ -25,6 +25,7 @@ public:
     double getRadius();
     void setRadius(double r);
     bool getIsHighlighted();
+    void setIsHighlighted(bool val);
 
 private:
     QString name;

@@ -14,15 +14,20 @@
 #include <QDoubleValidator>
 #include <QMessageBox>
 #include <QDateTime>
-#include "SimulationController.h"
+#include "simulationcontroller.h"
 #include "SimulationArea.h"
 #include "simulationobjecttile.h"
 
-class MainWindow : public QMainWindow {
+class MainAppWindow : public QWidget {
     Q_OBJECT
 
 public:
-    MainWindow();
+    MainAppWindow();
+    SimulationArea* getSimulationArea();
+    SimulationController* getController();
+
+public slots:
+    void updateTiles();
 
 private slots:
     void adjustEdited();
@@ -34,7 +39,6 @@ private slots:
     void toggleAdding();
     void showNewSimulationDialogue();
     void changeSimulationSpeed();
-    void updateTiles();
 
 private:
     SimulationController controller;
@@ -78,7 +82,6 @@ private:
     QLabel *positionLabelX;
     QLabel *positionLabelY;
     QWidget *positionEditRow;
-    QPushButton *addEditButton2;
     QWidget *aboutView;
     QVBoxLayout *aboutViewLayout;
     QLabel *aboutViewTextLabel;

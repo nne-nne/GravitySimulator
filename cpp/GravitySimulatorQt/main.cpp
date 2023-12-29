@@ -1,17 +1,18 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QTimer>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    QElapsedTimer timer;
-    QObject::connect(&timer, &QElapsedTimer::timeout, &main_window.simulation_area, &QWidget::repaint);
-    QObject::connect(&timer, &QElapsedTimer::timeout, &main_window, &MainWindow::update_tiles);
-    QObject::connect(&timer, &QElapsedTimer::timeout, &main_window.controller, &ControllerClass::brr);
+    MainAppWindow mainAppWindow;
+    QTimer timer;
+    QObject::connect(&timer, &QTimer::timeout, mainAppWindow.getSimulationArea(), &QWidget::update);
+    QObject::connect(&timer, &QTimer::timeout, &mainAppWindow, &MainAppWindow::updateTiles);
+    QObject::connect(&timer, &QTimer::timeout, mainAppWindow.getController(), &SimulationController::brr);
     timer.start(1);
-    main_window.show();
-    w.show();
+    mainAppWindow.show();
+    mainAppWindow.show();
     return a.exec();
 }

@@ -1,4 +1,4 @@
-#include "SimulationObject.h"
+#include "simulationobject.h"
 #include <cmath>
 #include <QDebug>
 
@@ -55,7 +55,7 @@ void SimulationObject::applyGravity(SimulationObject& other, double gforce) {
     other.acceleration.second -= dirY * force / other.mass;
 }
 
-bool SimulationObject::detectCollision(const SimulationObject& other) {
+bool SimulationObject::detectCollision(SimulationObject& other) {
     if (this == &other) {
         return false;
     }
@@ -86,10 +86,17 @@ double SimulationObject::getRadius()
     return radius;
 }
 
-void SimulationObject::setRadius(double r){
+void SimulationObject::setRadius(double r)
+{
     radius = r;
 }
 
-bool SimulationObject::getIsHighlighted(){
+bool SimulationObject::getIsHighlighted()
+{
     return isHighlighted;
+}
+
+void SimulationObject::setIsHighlighted(bool val)
+{
+    isHighlighted = val;
 }

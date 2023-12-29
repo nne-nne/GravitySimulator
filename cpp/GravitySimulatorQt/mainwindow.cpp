@@ -1,8 +1,18 @@
-#include "MainWindow.h"
-#include "SimulationObjectTile.h"
+#include "mainwindow.h"
+#include "simulationobjecttile.h"
 #include <QDateTime>
 
-MainWindow::MainWindow() : simulationArea(new SimulationArea(this, &controller)) {
+SimulationArea* MainAppWindow::getSimulationArea()
+{
+    return simulationArea;
+}
+
+SimulationController* MainAppWindow::getController()
+{
+    return &controller;
+}
+
+MainAppWindow::MainAppWindow() : simulationArea(new SimulationArea(this, &controller)) {
     setWindowTitle("Symulator Grawitacji");
     setFixedSize(1150, 550);
 
@@ -38,12 +48,12 @@ MainWindow::MainWindow() : simulationArea(new SimulationArea(this, &controller))
     // Create "Pause" button
     pauseButton = new QPushButton("Pauza", this);
     pauseButton->setFixedWidth(60);
-    connect(pauseButton, &QPushButton::clicked, this, &MainWindow::togglePause);
+    connect(pauseButton, &QPushButton::clicked, this, &MainAppWindow::togglePause);
 
     // Create "New simulation" button
     newSimulationButton = new QPushButton("Nowa symulacja", this);
     newSimulationButton->setFixedWidth(100);
-    connect(newSimulationButton, &QPushButton::clicked, this, &MainWindow::showNewSimulationDialogue);
+    connect(newSimulationButton, &QPushButton::clicked, this, &MainAppWindow::showNewSimulationDialogue);
 
     // Create "Simulation speed" field
     simSpeedLabel = new QLabel("Prędkość symulacji:", this);
@@ -51,7 +61,7 @@ MainWindow::MainWindow() : simulationArea(new SimulationArea(this, &controller))
     simSpeedField = new QLineEdit("1");
     simSpeedField->setFixedWidth(30);
     simSpeedField->setValidator(new QDoubleValidator());
-    connect(simSpeedField, &QLineEdit::returnPressed, this, &MainWindow::changeSimulationSpeed);
+    connect(simSpeedField, &QLineEdit::returnPressed, this, &MainAppWindow::changeSimulationSpeed);
 
     menuBarLayout->addWidget(infoLabel);
     menuBarLayout->addWidget(pauseButton);
@@ -64,9 +74,9 @@ MainWindow::MainWindow() : simulationArea(new SimulationArea(this, &controller))
     rootLayout->addWidget(menuBarWidget);
 
     addEditButton1 = new QPushButton("➕ Tryb dodawania");
-    connect(addEditButton1, &QPushButton::clicked, this, &MainWindow::toggleAdding);
+    connect(addEditButton1, &QPushButton::clicked, this, &MainAppWindow::toggleAdding);
     addEditButton2 = new QPushButton("➕ Tryb dodawania");
-    connect(addEditButton2, &QPushButton::clicked, this, &MainWindow::toggleAdding);
+    connect(addEditButton2, &QPushButton::clicked, this, &MainAppWindow::toggleAdding);
 
     // Create simulation object's panel
     createObjectPanel();
@@ -84,13 +94,13 @@ MainWindow::MainWindow() : simulationArea(new SimulationArea(this, &controller))
     createAboutView();
 }
 
-void MainWindow::adjustEdited() {
-    if (!controller.isAdding) {
+void MainAppWindow::adjustEdited() {
+    if (!controller.getIsAdding()) {
         controller.adjustObject(controller.getEditedObject());
     }
 }
 
-void MainWindow::addObjectTile(SimulationObject *o) {
+void MainAppWindow::addObjectTile(SimulationObject *o) {
     SimulationObjectTile *tile = new SimulationObjectTile(o, &controller);
     QWidget *wrapper = new QWidget(this);
     QHBoxLayout *wrapperLayout = new QHBoxLayout(wrapper);
@@ -107,25 +117,25 @@ void MainWindow::addObjectTile(SimulationObject *o) {
     simulationObjectLayout->addWidget(wrapper);
 }
 
-void MainWindow::showAboutView() {
+void MainAppWindow::showAboutView() {
     mainWidget->setHidden(true);
     aboutView->setHidden(false);
     menuBarWidget->setHidden(true);
 }
 
-void MainWindow::returnToMain() {
+void MainAppWindow::returnToMain() {
     mainWidget->setHidden(false);
     aboutView->setHidden(true);
     menuBarWidget->setHidden(false);
 }
 
-void MainWindow::setInfoLabel(const QString &text) {
+void MainAppWindow::setInfoLabel(const QString &text) {
     QString currentTime = QDateTime::currentDateTime().toString("HH:mm:ss:zzz");
     QString labeledText = currentTime + ": " + text;
     infoLabel->setText(labeledText);
 }
 
-void MainWindow::togglePause() {
+void MainAppWindow::togglePause() {
     if (!controller.getIsPaused()) {
         pauseButton->setText("Wznów");
             controller.setIsPaused(true);
@@ -135,28 +145,28 @@ void MainWindow::togglePause() {
     }
 }
 
-void MainWindow::toggleAdding() {
-    if (!controller.isAdding) {
+void MainAppWindow::toggleAdding() {
+    if (!controller.getIsAdding()) {
         addEditButton1->setText("➕ Tryb dodawania");
         addEditButton2->setText("➕ Tryb dodawania");
-        controller.isAdding = true;
+        controller.setIsAdding(true);
         controller.unhighlight();
     } else {
-        if (!controller.simulationObjects.isEmpty()) {
+        if (!controller.getSimulationObjects().isEmpty()) {
             addEditButton1->setText("✏️ Tryb edycji");
             addEditButton2->setText("✏️ Tryb edycji");
-            controller.isAdding = false;
-            controller.chooseObjectToEdit(controller.simulationObjects[0]);
+            controller.setIsAdding(false);
+            controller.chooseObjectToEdit(controller.getSimulationObject(0));
         } else {
             setInfoLabel("brak obiektów do edycji!");
         }
     }
 }
 
-void MainWindow::showNewSimulationDialogue() {
-    if (!controller.isPaused) {
+void MainAppWindow::showNewSimulationDialogue() {
+    if (!controller.getIsPaused()) {
         pauseButton->setText("Wznów");
-        controller.isPaused = true;
+            controller.setIsPaused(true);
     }
 
     QMessageBox msgBox(this);
@@ -171,26 +181,26 @@ void MainWindow::showNewSimulationDialogue() {
         controller.resetSimulation();
     } else if (result == QMessageBox::RejectRole) {
         pauseButton->setText("Pauza");
-        controller.isPaused = false;
+        controller.setIsPaused(false);
     }
 }
 
-void MainWindow::changeSimulationSpeed() {
+void MainAppWindow::changeSimulationSpeed() {
     bool conversionOk;
     double newSpeed = simSpeedField->text().replace(',', '.').toDouble(&conversionOk);
     if (conversionOk) {
-        controller.simulationSpeed = newSpeed;
+        controller.setSimulationSpeed(newSpeed);
         setInfoLabel("Nowa prędkość symulacji: " + QString::number(newSpeed));
     }
 }
 
-void MainWindow::updateTiles() {
+void MainAppWindow::updateTiles() {
     for (SimulationObjectTile *tile : objectTiles) {
         tile->update();
     }
 }
 
-void MainWindow::createMenuBar() {
+void MainAppWindow::createMenuBar() {
     aboutMenu = new QMenu("O aplikacji");
     menuBar = new QMenuBar();
     menuBar->addMenu(aboutMenu);
@@ -202,7 +212,7 @@ void MainWindow::createMenuBar() {
     aboutMenu->addAction(newAction);
 }
 
-void MainWindow::createObjectPanel() {
+void MainAppWindow::createObjectPanel() {
     objectPanel = new QWidget(this);
     objectPanel->setFixedWidth(400);
     simulationObjectLayout = new QVBoxLayout(objectPanel);
@@ -213,7 +223,7 @@ void MainWindow::createObjectPanel() {
     mainLayout->addWidget(objectPanel);
 }
 
-void MainWindow::createPropertiesPanel() {
+void MainAppWindow::createPropertiesPanel() {
     propertiesPanel = new QWidget(this);
     propertiesPanel->setFixedWidth(200);
     propertiesLayout = new QVBoxLayout(propertiesPanel);
@@ -259,7 +269,7 @@ void MainWindow::createPropertiesPanel() {
     positionEditRow->layout()->addWidget(positionEditY);
 
     addEditButton2 = new QPushButton("➕ Tryb edycji", this);
-    connect(addEditButton2, &QPushButton::clicked, this, &MainWindow::adjustEdited);
+    connect(addEditButton2, &QPushButton::clicked, this, &MainAppWindow::adjustEdited);
 
     propertiesLayout->addWidget(nameLabel);
     propertiesLayout->addWidget(nameEdit);
@@ -280,7 +290,7 @@ void MainWindow::createPropertiesPanel() {
 }
 
 
-void MainWindow::createAboutView() {
+void MainAppWindow::createAboutView() {
     aboutView = new QWidget(this);
     aboutViewLayout = new QVBoxLayout(aboutView);
     aboutViewLayout->setAlignment(Qt::AlignCenter);
@@ -302,7 +312,7 @@ Przyciski z napisem 'Tryb dodawania' lub 'Tryb edycji' służą jako przełączn
 
     aboutViewBackButton = new QPushButton("Powrót", this);
     aboutViewBackButton->setFixedWidth(1100);
-    connect(aboutViewBackButton, &QPushButton::clicked, this, &MainWindow::returnToMain);
+    connect(aboutViewBackButton, &QPushButton::clicked, this, &MainAppWindow::returnToMain);
 
     aboutViewLayout->addWidget(aboutViewTextLabel);
     aboutViewLayout->addWidget(aboutViewBackButton);

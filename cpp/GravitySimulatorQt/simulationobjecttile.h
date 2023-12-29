@@ -7,8 +7,8 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QMouseEvent>
-#include "SimulationObject.h"
-#include "SimulationController.h"
+#include "simulationobject.h"
+#include "simulationcontroller.h"
 
 class SimulationObjectTile : public QWidget {
     Q_OBJECT

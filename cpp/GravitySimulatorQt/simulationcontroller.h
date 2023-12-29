@@ -5,16 +5,19 @@
 #include <QList>
 #include <QPointF>
 #include <QElapsedTimer>
-#include "SimulationObject.h"  // Include the header file for SimulationObject
+#include "simulationobject.h"
+#include "mainwindow.h"
 
 class SimulationController : public QObject {
     Q_OBJECT
+
+public slots:
+    void brr();
 
 public:
     SimulationController(QObject* app, const QPoint& size, const QPoint& margin);
 
     void resetSimulation();
-    void brr();
     void nextFrame(double frameTime);
     void checkDestroyObject(SimulationObject* o);
     void fallAll(double frameTime);
@@ -25,12 +28,18 @@ public:
     void chooseObjectToEdit(SimulationObject* o);
     void unhighlight();
     SimulationObject* getSimulationObject(int i);
+    QList<SimulationObject*> getSimulationObjects();
+    SimulationObject* getEditedObject();
     bool getIsPaused();
     void setIsPaused(bool val);
+    bool getIsAdding();
+    void setIsAdding(bool val);
+    MainAppWindow* getMainAppWindow();
+    void setSimulationSpeed(double val);
 
 private:
     QList<SimulationObject*> simulationObjects;
-    QObject* app;
+    MainAppWindow* mainAppWindow;
     QPoint size;
     QPoint margin;
     QElapsedTimer prevTime;
