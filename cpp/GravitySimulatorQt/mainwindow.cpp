@@ -20,7 +20,7 @@ QVBoxLayout* MainAppWindow::getSimulationObjectLayout()
 MainAppWindow::MainAppWindow() : simulationArea() {
     setWindowTitle("Symulator Grawitacji");
     setFixedSize(1150, 550);
-    controller = new SimulationController(this, QPointF(500, 500), QPointF(100, 100), 6.67408, false, 1.0, 0.0, true, nullptr);
+    controller = new SimulationController(this, QPoint(500, 500), QPoint(100, 100), 6.67408, false, 1.0, 0.0, true, nullptr);
     controller->setParent(this);
     simulationArea = new SimulationArea(this, controller);
     rootWidget = new QWidget(this);
@@ -97,14 +97,14 @@ MainAppWindow::MainAppWindow() : simulationArea() {
 }
 
 void MainAppWindow::adjustEdited() {
-    if (!controller.getIsAdding()) {
-        controller.adjustObject(controller.getEditedObject());
+    if (!controller->getIsAdding()) {
+        controller->adjustObject(controller->getEditedObject());
     }
 }
 
 void MainAppWindow::addObjectTile(SimulationObject *o) {
-    SimulationObjectTile *tile = new SimulationObjectTile(o, controller);
     QWidget *wrapper = new QWidget(this);
+    SimulationObjectTile *tile = new SimulationObjectTile(o, controller, wrapper);
     QHBoxLayout *wrapperLayout = new QHBoxLayout(wrapper);
     wrapperLayout->setAlignment(Qt::AlignLeft);
     wrapperLayout->setContentsMargins(0, 0, 0, 0);
@@ -138,27 +138,27 @@ void MainAppWindow::setInfoLabel(const QString &text) {
 }
 
 void MainAppWindow::togglePause() {
-    if (!controller.getIsPaused()) {
+    if (!controller->getIsPaused()) {
         pauseButton->setText("Wznów");
-            controller.setIsPaused(true);
+            controller->setIsPaused(true);
     } else {
         pauseButton->setText("Pauza");
-        controller.setIsPaused(false);
+        controller->setIsPaused(false);
     }
 }
 
 void MainAppWindow::toggleAdding() {
-    if (!controller.getIsAdding()) {
+    if (!controller->getIsAdding()) {
         addEditButton1->setText("➕ Tryb dodawania");
         addEditButton2->setText("➕ Tryb dodawania");
-        controller.setIsAdding(true);
-        controller.unhighlight();
+        controller->setIsAdding(true);
+        controller->unhighlight();
     } else {
-        if (!controller.getSimulationObjects().isEmpty()) {
+        if (!controller->getSimulationObjects().isEmpty()) {
             addEditButton1->setText("✏️ Tryb edycji");
             addEditButton2->setText("✏️ Tryb edycji");
-            controller.setIsAdding(false);
-            controller.chooseObjectToEdit(controller.getSimulationObject(0));
+            controller->setIsAdding(false);
+            controller->chooseObjectToEdit(controller->getSimulationObject(0));
         } else {
             setInfoLabel("brak obiektów do edycji!");
         }
@@ -166,9 +166,9 @@ void MainAppWindow::toggleAdding() {
 }
 
 void MainAppWindow::showNewSimulationDialogue() {
-    if (!controller.getIsPaused()) {
+    if (!controller->getIsPaused()) {
         pauseButton->setText("Wznów");
-            controller.setIsPaused(true);
+            controller->setIsPaused(true);
     }
 
     QMessageBox msgBox(this);
@@ -180,10 +180,10 @@ void MainAppWindow::showNewSimulationDialogue() {
 
     int result = msgBox.exec();
     if (result == QMessageBox::AcceptRole) {
-        controller.resetSimulation();
+        controller->resetSimulation();
     } else if (result == QMessageBox::RejectRole) {
         pauseButton->setText("Pauza");
-        controller.setIsPaused(false);
+        controller->setIsPaused(false);
     }
 }
 
@@ -196,7 +196,7 @@ void MainAppWindow::changeSimulationSpeed() {
     bool conversionOk;
     double newSpeed = simSpeedField->text().replace(',', '.').toDouble(&conversionOk);
     if (conversionOk) {
-        controller.setSimulationSpeed(newSpeed);
+        controller->setSimulationSpeed(newSpeed);
         setInfoLabel("Nowa prędkość symulacji: " + QString::number(newSpeed));
     }
 }

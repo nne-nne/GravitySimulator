@@ -22,7 +22,7 @@ class SimulationArea;
 class SimulationController;
 class SimulationObjectTile;
 
-class MainAppWindow : public QWidget {
+class MainAppWindow : public QMainWindow {
     Q_OBJECT
 
 public:
