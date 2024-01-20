@@ -280,8 +280,10 @@ void MainAppWindow::createPropertiesPanel() {
     connect(nameEdit, &QLineEdit::returnPressed, this, &MainAppWindow::adjustEdited);
     connect(massEdit, &QLineEdit::returnPressed, this, &MainAppWindow::adjustEdited);
     connect(radiusEdit, &QLineEdit::returnPressed, this, &MainAppWindow::adjustEdited);
-    connect(velocityEdit, &QLineEdit::returnPressed, this, &MainAppWindow::adjustEdited);
-    connect(positionEdit, &QLineEdit::returnPressed, this, &MainAppWindow::adjustEdited);
+    connect(velocityEditX, &QLineEdit::returnPressed, this, &MainAppWindow::adjustEdited);
+    connect(velocityEditY, &QLineEdit::returnPressed, this, &MainAppWindow::adjustEdited);
+    connect(positionEditX, &QLineEdit::returnPressed, this, &MainAppWindow::adjustEdited);
+    connect(positionEditY, &QLineEdit::returnPressed, this, &MainAppWindow::adjustEdited);
 
     propertiesLayout->addWidget(nameLabel);
     propertiesLayout->addWidget(nameEdit);
