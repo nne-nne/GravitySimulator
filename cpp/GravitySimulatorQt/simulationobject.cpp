@@ -109,3 +109,19 @@ void SimulationObject::setIsHighlighted(bool val)
 {
     isHighlighted = val;
 }
+
+void SimulationObject::setName(QString name)
+{
+    this->name = name;
+}
+
+void SimulationObject::setMass(double mass)
+{
+    this->mass = mass;
+}
+
+void SimulationObject::setVelocity(double x, double y)
+{
+    velocity.first = x;
+    velocity.second = y;
+}

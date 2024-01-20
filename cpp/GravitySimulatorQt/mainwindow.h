@@ -32,6 +32,13 @@ public:
     QVBoxLayout* getSimulationObjectLayout();
     void setInfoLabel(const QString &text);
     QList<SimulationObjectTile*> getObjectTiles();
+    QString getNameEditValue(QString defaultValue);
+    double getMassEditValue(double defaultValue);
+    double getRadiusEditValue(double defaultValue);
+    std::pair<double, double> getVelocityEditValue(double defaultX, double defaultY);
+    std::pair<double, double> getPositionEditValue(double defaultX, double defaultY);
+    void clearEditFields();
+    bool canCreateSimulationObject();
 
 public slots:
     void updateTiles();

@@ -149,7 +149,6 @@ void MainAppWindow::togglePause() {
 }
 
 void MainAppWindow::toggleAdding() {
-    qDebug("toggle adding");
     if (!controller->getIsAdding()) {
         addEditButton1->setText("➕ Tryb dodawania");
         addEditButton2->setText("➕ Tryb dodawania");
@@ -328,4 +327,102 @@ Przyciski z napisem 'Tryb dodawania' lub 'Tryb edycji' służą jako przełączn
 
     rootLayout->addWidget(aboutView);
     aboutView->setHidden(true);
+}
+
+QString MainAppWindow::getNameEditValue(QString defaultValue)
+{
+    if(!nameEdit->text().isEmpty())
+    {
+        return nameEdit->text();
+    }
+    else
+    {
+        return defaultValue;
+    }
+}
+
+double MainAppWindow::getMassEditValue(double defaultValue)
+{
+    if(!massEdit->text().isEmpty())
+    {
+        QString massStr = massEdit->text();
+        bool success;
+        double mass = massStr.toDouble(&success);
+        return mass;
+    }
+    else
+    {
+        return defaultValue;
+    }
+}
+
+double MainAppWindow::getRadiusEditValue(double defaultValue)
+{
+    if(!radiusEdit->text().isEmpty())
+    {
+        QString radiusStr = radiusEdit->text();
+        bool success;
+        double radius = radiusStr.toDouble(&success);
+        return radius;
+    }
+    else
+    {
+        return defaultValue;
+    }
+}
+
+std::pair<double, double> MainAppWindow::getVelocityEditValue(double defaultX, double defaultY)
+{
+    std::pair<double, double> result = std::pair<double, double>(defaultX, defaultY);
+    if(!velocityEditX->text().isEmpty())
+    {
+        QString xStr = velocityEditX->text();
+        bool successX;
+        double x = xStr.toDouble(&successX);
+        result.first = x;
+    }
+    if(!velocityEditY->text().isEmpty())
+    {
+        QString yStr = velocityEditY->text();
+        bool successY;
+        double y = yStr.toDouble(&successY);
+        result.second = y;
+    }
+    return result;
+}
+
+std::pair<double, double> MainAppWindow::getPositionEditValue(double defaultX, double defaultY)
+{
+    std::pair<double, double> result = std::pair<double, double>(defaultX, defaultY);
+    if(!positionEditX->text().isEmpty())
+    {
+        QString xStr = positionEditX->text();
+        bool successX;
+        double x = xStr.toDouble(&successX);
+        result.first = x;
+    }
+    if(!positionEditY->text().isEmpty())
+    {
+        QString yStr = positionEditY->text();
+        bool successY;
+        double y = yStr.toDouble(&successY);
+        result.second = y;
+    }
+    return result;
+}
+
+void MainAppWindow::clearEditFields()
+{
+    nameEdit->clear();
+    massEdit->clear();
+    radiusEdit->clear();
+    velocityEditX->clear();
+    velocityEditY->clear();
+    positionEditX->clear();
+    positionEditY->clear();
+}
+
+bool MainAppWindow::canCreateSimulationObject()
+{
+    return !nameEdit->text().isEmpty();
 }

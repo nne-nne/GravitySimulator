@@ -25,10 +25,13 @@ public:
     double getRadius();
     double getMass();
     std::pair<double, double> getVelocity();
+    void setVelocity(double x, double y);
     std::pair<double, double> getAcceleration();
     void setRadius(double r);
     bool getIsHighlighted();
     void setIsHighlighted(bool val);
+    void setName(QString name);
+    void setMass(double mass);
 
 private:
     QString name;

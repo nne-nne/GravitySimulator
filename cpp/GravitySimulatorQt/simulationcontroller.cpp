@@ -49,7 +49,7 @@ void SimulationController::checkDestroyObject(SimulationObject* o)
 
     if (destroy)
     {
-        mainAppWindow->setProperty("info_label", QString("Obiekt %1 opuścił obszar symulacji.").arg(o->getName()));
+        mainAppWindow->setInfoLabel(QString("Obiekt %1 opuścił obszar symulacji.").arg(o->getName()));
         simulationObjects.removeOne(o);
         delete o;
     }
@@ -76,7 +76,7 @@ void SimulationController::simulateGravity(double frameTime, double gforce)
 
             if (o1->detectCollision(*o2))
             {
-                mainAppWindow->setProperty("info_label", QString("Kolizja obiektów %1 i %2.")
+                mainAppWindow->setInfoLabel(QString("Kolizja obiektów %1 i %2.")
                                               .arg(o1->getName())
                                                    .arg(o2->getName()));
                o1->collide(*o2);
@@ -98,66 +98,43 @@ void SimulationController::highlightObject(SimulationObject* o)
 
 void SimulationController::adjustObject(SimulationObject* o)
 {
-    if (!mainAppWindow->property("radius_edit").toString().isEmpty())
-    {
-        bool ok;
-        double r = mainAppWindow->property("radius_edit").toString().toDouble(&ok);
-        if (ok && r > 0)
-        {
-            o->setRadius(r);
-        }
-        else
-        {
-            mainAppWindow->setProperty("info_label", "Zły format liczby");
-                return;
-        }
-    }
+    QString name = mainAppWindow->getNameEditValue(o->getName());
+    o->setName(name);
 
-    mainAppWindow->setProperty("mass_edit", "");
-    mainAppWindow->setProperty("name_edit", "");
-    mainAppWindow->setProperty("radius_edit", "");
-    mainAppWindow->setProperty("velocity_edit_x", "");
-    mainAppWindow->setProperty("velocity_edit_y", "");
-    mainAppWindow->setProperty("position_edit_x", "");
-    mainAppWindow->setProperty("position_edit_y", "");
+    double mass = mainAppWindow->getMassEditValue(o->getMass());
+    o->setMass(mass);
 
-    mainAppWindow->setProperty("info_label", QString("edytowano obiekt %1").arg(o->getName()));
+    double radius = mainAppWindow->getRadiusEditValue(o->getRadius());
+    o->setRadius(radius);
+
+    std::pair<double, double> currentPosition = o->getPosition();
+    std::pair<double, double> position = mainAppWindow->getPositionEditValue(currentPosition.first, currentPosition.second);
+
+    o->setPosition(position.first, position.second);
+
+    std::pair<double, double> currentVelocity = o->getVelocity();
+    std::pair<double, double> velocity = mainAppWindow->getVelocityEditValue(currentVelocity.first, currentVelocity.second);
+
+    o->setVelocity(velocity.first, velocity.second);
+
+    mainAppWindow->clearEditFields();
+
+    mainAppWindow->setInfoLabel(QString("edytowano obiekt %1").arg(o->getName()));
 }
 
 void SimulationController::createSimulationObject(const QPointF& clickPosition)
 {
-    QString name = mainAppWindow->property("name_edit").toString();
-    if (name.isEmpty())
+    QString name = mainAppWindow->getNameEditValue("");
+    if (!mainAppWindow->canCreateSimulationObject())
     {
-        mainAppWindow->setProperty("info_label", "uzupełnij pole 'nazwa'");
+        mainAppWindow->setInfoLabel("uzupełnij pole 'nazwa'");
         return;
     }
 
-    std::pair<double, double> position(clickPosition.x(), clickPosition.y());
-    double mass = 100.0;
-    double radius = 10.0;
-    std::pair<double, double> velocity(0.0, 0.0);
-
-    bool ok;
-    if (!mainAppWindow->property("mass_edit").toString().isEmpty())
-    {
-        mass = mainAppWindow->property("mass_edit").toString().toDouble(&ok);
-        if (!ok || mass <= 0)
-        {
-            mainAppWindow->setProperty("info_label", "Zły format liczby");
-            return;
-        }
-    }
-
-    if (!mainAppWindow->property("radius_edit").toString().isEmpty())
-    {
-        radius = mainAppWindow->property("radius_edit").toString().toDouble(&ok);
-        if (!ok || radius <= 0)
-        {
-            mainAppWindow->setProperty("info_label", "Zły format liczby");
-            return;
-        }
-    }
+    std::pair<double, double> position = mainAppWindow->getPositionEditValue(clickPosition.x(), clickPosition.y());
+    double mass = mainAppWindow->getMassEditValue(10.0);
+    double radius = mainAppWindow->getRadiusEditValue(10.0);
+    std::pair<double, double> velocity =  mainAppWindow->getVelocityEditValue(0.0, 0.0);
     std::pair<double, double> acceleration(0, 0);
     SimulationObject* o = new SimulationObject(name, position, velocity, acceleration, radius, mass);
 
@@ -167,7 +144,7 @@ void SimulationController::createSimulationObject(const QPointF& clickPosition)
         SimulationObject* other = simulationObjects.at(i);
         if (o->detectCollision(*other))
         {
-            mainAppWindow->setProperty("info_label", "akcja spowodowałaby kolizję!");
+            mainAppWindow->setInfoLabel("akcja spowodowałaby kolizję!");
             canPlace = false;
             break;
         }
@@ -177,15 +154,8 @@ void SimulationController::createSimulationObject(const QPointF& clickPosition)
     {
         simulationObjects.push_back(o);
         mainAppWindow->addObjectTile(o);
-        mainAppWindow->setProperty("info_label", QString("dodano obiekt %1").arg(o->getName()));
-
-        mainAppWindow->setProperty("name_edit", "");
-        mainAppWindow->setProperty("mass_edit", "");
-        mainAppWindow->setProperty("radius_edit", "");
-        mainAppWindow->setProperty("velocity_edit_x", "");
-        mainAppWindow->setProperty("velocity_edit_y", "");
-        mainAppWindow->setProperty("position_edit_x", "");
-        mainAppWindow->setProperty("position_edit_y", "");
+        mainAppWindow->setInfoLabel(QString("dodano obiekt %1").arg(o->getName()));
+        mainAppWindow->clearEditFields();
     }
 }
 
@@ -193,7 +163,7 @@ void SimulationController::chooseObjectToEdit(SimulationObject* o)
 {
     if (o)
     {
-        mainAppWindow->setProperty("info_label", QString("wybrano obiekt %1").arg(o->getName()));
+        mainAppWindow->setInfoLabel(QString("wybrano obiekt %1").arg(o->getName()));
         highlightObject(o);
         editedObject = o;
     }

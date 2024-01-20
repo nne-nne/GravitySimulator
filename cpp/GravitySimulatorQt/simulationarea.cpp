@@ -42,28 +42,31 @@ void SimulationArea::paintEvent(QPaintEvent *event) {
 }
 
 void SimulationArea::mousePressEvent(QMouseEvent *event) {
-    if (event->button() == Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton)
+    {
         int x = event->x();
         int y = event->y();
 
-        if (simulationController->getIsAdding()) {
-            qDebug("get is adding");
+        if (simulationController->getIsAdding())
+        {
             simulationController->createSimulationObject(QPointF(x, y));
-        } else {
+        }
+        else
+        {
             std::pair<double, double> prevPos = simulationController->getEditedObject()->getPosition();
-            qDebug("%f, %f", prevPos.first, prevPos.second );
-
             simulationController->getEditedObject()->setPosition(x, y);
 
             QList<SimulationObject *> simulationObjects = simulationController->getSimulationObjects();
             for (int i = 0; i < simulationObjects.size(); i++)
             {
                 SimulationObject* other = simulationObjects.at(i);
-                if (other->getPosition() == simulationController->getEditedObject()->getPosition()) {
+                if (other->getPosition() == simulationController->getEditedObject()->getPosition())
+                {
                     continue;
                 }
 
-                if (simulationController->getEditedObject()->detectCollision(*other)) {
+                if (simulationController->getEditedObject()->detectCollision(*other))
+                {
                     simulationController->getMainAppWindow()->setInfoLabel("akcja spowodowałaby kolizję!");
                     simulationController->getEditedObject()->setPosition(prevPos.first, prevPos.second);
                     break;
