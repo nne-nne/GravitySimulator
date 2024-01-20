@@ -149,6 +149,7 @@ void MainAppWindow::togglePause() {
 }
 
 void MainAppWindow::toggleAdding() {
+    qDebug("toggle adding");
     if (!controller->getIsAdding()) {
         addEditButton1->setText("➕ Tryb dodawania");
         addEditButton2->setText("➕ Tryb dodawania");
@@ -276,7 +277,6 @@ void MainAppWindow::createPropertiesPanel() {
     positionEditRow->layout()->addWidget(positionLabelY);
     positionEditRow->layout()->addWidget(positionEditY);
 
-    addEditButton2 = new QPushButton("➕ Tryb edycji", this);
     connect(addEditButton2, &QPushButton::clicked, this, &MainAppWindow::adjustEdited);
 
     propertiesLayout->addWidget(nameLabel);

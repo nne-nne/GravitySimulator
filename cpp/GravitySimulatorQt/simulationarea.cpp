@@ -5,6 +5,7 @@
 #include <QColor>
 #include <QFont>
 #include "simulationcontroller.h"
+#include <QtLogging>
 
 SimulationArea::SimulationArea(QWidget *parent, SimulationController *simulationController)
     : QWidget(parent), simulationController(simulationController) {}
@@ -46,9 +47,12 @@ void SimulationArea::mousePressEvent(QMouseEvent *event) {
         int y = event->y();
 
         if (simulationController->getIsAdding()) {
+            qDebug("get is adding");
             simulationController->createSimulationObject(QPointF(x, y));
         } else {
             std::pair<double, double> prevPos = simulationController->getEditedObject()->getPosition();
+            qDebug("%f, %f", prevPos.first, prevPos.second );
+
             simulationController->getEditedObject()->setPosition(x, y);
 
             QList<SimulationObject *> simulationObjects = simulationController->getSimulationObjects();
