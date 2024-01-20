@@ -29,7 +29,7 @@ public:
     void chooseObjectToEdit(SimulationObject* o);
     void unhighlight();
     SimulationObject* getSimulationObject(int i);
-    QList<SimulationObject*> getSimulationObjects();
+    QList<SimulationObject*> &getSimulationObjects();
     SimulationObject* getEditedObject();
     bool getIsPaused();
     void setIsPaused(bool val);

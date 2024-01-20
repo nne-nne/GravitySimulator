@@ -12,6 +12,7 @@ SimulationController::SimulationController(MainAppWindow* mainAppWindow, const Q
 
 void SimulationController::resetSimulation()
 {
+    qDeleteAll(simulationObjects);
     simulationObjects.clear();
     gforce = 6.67408;
     prevTime.restart();
@@ -35,7 +36,7 @@ void SimulationController::brr()
 
 void SimulationController::nextFrame(double frameTime)
 {
-    simulateGravity(frameTime, gforce);
+   simulateGravity(frameTime, gforce);
 }
 
 void SimulationController::checkDestroyObject(SimulationObject* o)
@@ -181,7 +182,7 @@ SimulationObject* SimulationController::getSimulationObject(int i)
     return simulationObjects[i];
 }
 
-QList<SimulationObject*> SimulationController::getSimulationObjects()
+QList<SimulationObject*>& SimulationController::getSimulationObjects()
 {
     return simulationObjects;
 }

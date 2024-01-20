@@ -57,7 +57,7 @@ void SimulationArea::mousePressEvent(QMouseEvent *event) {
             simulationController->getEditedObject()->setPosition(x, y);
 
             QList<SimulationObject *> simulationObjects = simulationController->getSimulationObjects();
-            for (int i = 0; i < simulationObjects.size(); i++)
+            for (int i = 0; i < simulationObjects.length(); i++)
             {
                 SimulationObject* other = simulationObjects.at(i);
                 if (other->getPosition() == simulationController->getEditedObject()->getPosition())
